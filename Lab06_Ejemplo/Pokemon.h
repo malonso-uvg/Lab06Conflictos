@@ -10,5 +10,7 @@ public:
 	String^ generacion;
 
 	String^ getName();
+
+	String^ getGeneracion();
 };
 
