@@ -10,7 +10,8 @@ public:
 	String^ generacion;
 
 	String^ getName();
+	
+	String^ getGeneration();
 
-	String^ getGeneracion();
 };
 
