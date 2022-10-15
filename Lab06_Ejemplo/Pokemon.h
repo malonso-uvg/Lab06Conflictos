@@ -4,15 +4,20 @@ using namespace System;
 
 ref class Pokemon
 {
-public:
+private:
 	//ESta es un comentario de conflicto
-	String^ pokemonName;
-	String^ generacion;
+	String^ name;
+	String^ generation;
 	String^ tipo;
 
+public:
 	String^ getName();
-	
 	String^ getGeneration();
+	String^ getType();
+	void setName(String^ _name);
+	void setGeneration(String^ _generation);
+	void setType(String^ _type);
+
 
 };
 

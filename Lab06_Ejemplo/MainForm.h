@@ -23,6 +23,7 @@ namespace Lab06Ejemplo {
 			//
 			//TODO: Add the constructor code here
 			//
+			misPokemon = gcnew array<Pokemon^>(ARRAY_SIZE);
 		}
 
 	protected:
@@ -36,16 +37,24 @@ namespace Lab06Ejemplo {
 				delete components;
 			}
 		}
-	private: System::Windows::Forms::Button^ button1;
-	private: System::Windows::Forms::OpenFileDialog^ openFileDialog1;
-	private: System::Windows::Forms::ListBox^ listBox1;
+	private: System::Windows::Forms::Button^ ObtenerArchivo;
+	protected:
+
+	private: System::Windows::Forms::OpenFileDialog^ ofdEjemploArchivos;
+	private: System::Windows::Forms::ListBox^ lstNombres;
+	private: System::Windows::Forms::TextBox^ txtDescription;
+
+	private: System::Windows::Forms::ContextMenuStrip^ contextMenuStrip1;
+	private: System::ComponentModel::IContainer^ components;
+
+
 	protected:
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -54,85 +63,112 @@ namespace Lab06Ejemplo {
 		/// </summary>
 		void InitializeComponent(void)
 		{
-			this->button1 = (gcnew System::Windows::Forms::Button());
-			this->openFileDialog1 = (gcnew System::Windows::Forms::OpenFileDialog());
-			this->listBox1 = (gcnew System::Windows::Forms::ListBox());
+			this->components = (gcnew System::ComponentModel::Container());
+			this->ObtenerArchivo = (gcnew System::Windows::Forms::Button());
+			this->ofdEjemploArchivos = (gcnew System::Windows::Forms::OpenFileDialog());
+			this->lstNombres = (gcnew System::Windows::Forms::ListBox());
+			this->txtDescription = (gcnew System::Windows::Forms::TextBox());
+			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
 			this->SuspendLayout();
 			// 
-			// button1
+			// ObtenerArchivo
 			// 
-			this->button1->Location = System::Drawing::Point(121, 163);
-			this->button1->Name = L"button1";
-			this->button1->Size = System::Drawing::Size(75, 23);
-			this->button1->TabIndex = 0;
-			this->button1->Text = L"button1";
-			this->button1->UseVisualStyleBackColor = true;
-			this->button1->Click += gcnew System::EventHandler(this, &MainForm::button1_Click);
+			this->ObtenerArchivo->Location = System::Drawing::Point(113, 98);
+			this->ObtenerArchivo->Margin = System::Windows::Forms::Padding(2);
+			this->ObtenerArchivo->Name = L"ObtenerArchivo";
+			this->ObtenerArchivo->Size = System::Drawing::Size(56, 19);
+			this->ObtenerArchivo->TabIndex = 0;
+			this->ObtenerArchivo->Text = L"Cargar Archivo";
+			this->ObtenerArchivo->UseVisualStyleBackColor = true;
+			this->ObtenerArchivo->Click += gcnew System::EventHandler(this, &MainForm::button1_Click);
 			// 
-			// openFileDialog1
+			// ofdEjemploArchivos
 			// 
-			this->openFileDialog1->FileName = L"ofdEjemploArchivos";
+			this->ofdEjemploArchivos->FileName = L"ofdEjemploArchivos";
 			// 
-			// listBox1
+			// lstNombres
 			// 
-			this->listBox1->FormattingEnabled = true;
-			this->listBox1->ItemHeight = 16;
-			this->listBox1->Location = System::Drawing::Point(365, 229);
-			this->listBox1->Name = L"listBox1";
-			this->listBox1->Size = System::Drawing::Size(120, 84);
-			this->listBox1->TabIndex = 1;
+			this->lstNombres->FormattingEnabled = true;
+			this->lstNombres->Location = System::Drawing::Point(327, 48);
+			this->lstNombres->Margin = System::Windows::Forms::Padding(2);
+			this->lstNombres->Name = L"lstNombres";
+			this->lstNombres->Size = System::Drawing::Size(91, 69);
+			this->lstNombres->TabIndex = 1;
+			this->lstNombres->SelectedIndexChanged += gcnew System::EventHandler(this, &MainForm::lstNombres_SelectedIndexChanged);
+			// 
+			// txtDescription
+			// 
+			this->txtDescription->Location = System::Drawing::Point(327, 154);
+			this->txtDescription->Multiline = true;
+			this->txtDescription->Name = L"txtDescription";
+			this->txtDescription->Size = System::Drawing::Size(123, 85);
+			this->txtDescription->TabIndex = 2;
+			// 
+			// contextMenuStrip1
+			// 
+			this->contextMenuStrip1->Name = L"contextMenuStrip1";
+			this->contextMenuStrip1->Size = System::Drawing::Size(61, 4);
 			// 
 			// MainForm
 			// 
-			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
+			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
-			this->ClientSize = System::Drawing::Size(617, 422);
-			this->Controls->Add(this->listBox1);
-			this->Controls->Add(this->button1);
+			this->ClientSize = System::Drawing::Size(463, 343);
+			this->Controls->Add(this->txtDescription);
+			this->Controls->Add(this->lstNombres);
+			this->Controls->Add(this->ObtenerArchivo);
+			this->Margin = System::Windows::Forms::Padding(2);
 			this->Name = L"MainForm";
 			this->Text = L"MainForm";
 			this->ResumeLayout(false);
+			this->PerformLayout();
 
 		}
 #pragma endregion
+
+		array<Pokemon^>^ misPokemon;
+		int ARRAY_SIZE = 10;
+		int pokemonQty = 0;
+
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) {
 
-		
-		if (System::Windows::Forms::DialogResult::OK == openFileDialog1->ShowDialog()) {
-			StreamReader^ InputStream = gcnew StreamReader(openFileDialog1->FileName);
-			array<Pokemon^>^ misPokemon;
+		if (System::Windows::Forms::DialogResult::OK == ofdEjemploArchivos->ShowDialog()) {
+			StreamReader^ inputStream = gcnew StreamReader(ofdEjemploArchivos->FileName);
 
-			if (InputStream != nullptr)
-			{			
-				misPokemon = gcnew array<Pokemon^>(10);
-				int pokemonIndex = 0;
+			if (inputStream != nullptr) {
+				String ^ linea = inputStream->ReadLine();
+				while (linea && (pokemonQty < ARRAY_SIZE))  {
 
-				while (String^ lineOfText = InputStream->ReadLine())
-				{
-					char separador = ',';
-					array<String^>^ palabras = lineOfText->Split(separador);
-					
+					array<String^>^ datos = linea->Split(',');
+					Pokemon^ myPokemon = gcnew Pokemon();
+					myPokemon->setGeneration(datos[0]);
+					myPokemon->setName(datos[1]);
+					myPokemon->setType(datos[2]);
 
-					Pokemon^ miPokemon = gcnew Pokemon();
-					miPokemon->generacion = palabras[0];
-					miPokemon->pokemonName = palabras[1];
-					
-					misPokemon[pokemonIndex] = miPokemon;
-					pokemonIndex++;
-				}
+					misPokemon[pokemonQty] = myPokemon;
 
-				InputStream->Close(); 
-
-				for (int i = 0; i < misPokemon->Length; i++) {
-					if (misPokemon[i]) {
-						listBox1->Items->Add(misPokemon[i]->pokemonName);
-					}
-					
+					linea = inputStream->ReadLine();
+					pokemonQty++;
 				}
 			}
-			
-		}	
+			inputStream->Close();
+
+			for (int i = 0; i < pokemonQty; i++) {
+				lstNombres->Items->Add(misPokemon[i]->getName());
+			}
+		}
+		
+
 	}
 
-	};
+	private: System::Void lstNombres_SelectedIndexChanged(System::Object^ sender, System::EventArgs^ e) {
+		if (lstNombres->SelectedIndex >= 0) {
+			String^ pokeInfo = "Nombre: " + misPokemon[lstNombres->SelectedIndex]->getName() + "\r\n"
+			+" Generación: " + misPokemon[lstNombres->SelectedIndex]->getGeneration() + "\r\n"
+			+" Tipo: " + misPokemon[lstNombres->SelectedIndex]->getType();
+
+			txtDescription->Text = pokeInfo;
+		}
+	}
+};
 }
