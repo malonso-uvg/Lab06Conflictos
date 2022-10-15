@@ -8,6 +8,7 @@ public:
 	//ESta es un comentario de conflicto
 	String^ pokemonName;
 	String^ generacion;
+	String^ tipo;
 
 	String^ getName();
 	
